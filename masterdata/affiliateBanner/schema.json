@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Affiliate Banner",
+  "type": "object",
+  "properties": {
+    "affiliateId": {
+      "type": "string",
+      "title": "Affiliate ID"
+    },
+    "affiliateSlug": {
+      "type": "string",
+      "title": "Affiliate Slug"
+    },
+    "banner": {
+      "type": "string",
+      "format": "data-url",
+      "title": "Banner Image File"
+    }
+  },
+  "required": ["affiliateId", "affiliateSlug", "banner"],
+  "v-indexed": ["affiliateId", "affiliateSlug"],
+  "v-cache": false
+}

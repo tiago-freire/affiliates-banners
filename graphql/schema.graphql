@@ -1,0 +1,10 @@
+type Query {
+  getBannersAffiliatesScroll(
+    filter: BannersAffiliatesFilterInput
+    sorting: BannersAffiliatesSortingInput
+  ): [BannerAffiliateScroll]!
+}
+
+type Mutation {
+  addBannerAffiliate(newBannerAffiliate: NewBannerAffiliateInput!): BannerAffiliate!
+}

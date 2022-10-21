@@ -1,0 +1,40 @@
+input BannersAffiliatesFilterInput {
+  searchTerm: String
+}
+
+input BannersAffiliatesSortingInput {
+  field: BannerAffiliatesSortingField!
+  order: SortingOrder!
+}
+
+input NewBannerAffiliateInput {
+  affiliateId: ID!
+  affiliateSlug: String!
+  banner: String!
+}
+
+input UpdateBannerAffiliateInput {
+  banner: String
+}
+
+type BannerAffiliate {
+  id: ID
+  affiliateId: ID
+  affiliateSlug: String
+  banner: String
+}
+
+type BannerAffiliateScroll {
+  id: ID
+  affiliateId: ID
+  affiliateSlug: String
+  banner: String
+}
+
+type BannersAffiliatesScroll {
+  data: [BannerAffiliateScroll]
+}
+
+enum BannerAffiliatesSortingField {
+  affiliateSlug
+}
