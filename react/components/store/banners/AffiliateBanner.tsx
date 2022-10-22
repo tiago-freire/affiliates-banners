@@ -5,9 +5,9 @@ import GET_AFFILIATE_BANNER_BY_SLUG from '../../../graphql/getBannerAffiliateByS
 
 const getSlug = () => {
   const splitPathname = window.location?.pathname.split('/')
-
   return splitPathname && splitPathname[splitPathname.length - 1]
 }
+
 const AffiliateBanner = () => {
   const slug = getSlug()
   const { data } = useQuery<Query>(GET_AFFILIATE_BANNER_BY_SLUG, {
