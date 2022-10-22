@@ -1,6 +1,14 @@
 {
   "admin/navigation.label": "Affiliates Banners Management",
-  "admin/navigation.affiliates.banner": "Banners Management",
+  "admin/registration.affiliate.banner.title": "Banner Affiliate Registration",
+  "admin/update.affiliate.banner.title": "Edit Affiliate Banner",
+  "admin/list.affiliate.banner.title": "Affiliates Banners List",
+  "admin/edit.affiliate.banner.success.message": "Banner saved successfully.",
+  "admin/loading.label": "Loading",
+  "admin/registration.affiliate.banner.errorRequired": "Affiliate and banner are required.",
+  "admin/registration.affiliate.banner.onlyUpdate.label": "All affiliates already have banner. If necessary, edit one of them in the list below.",
+  "admin/list.affiliate.banner.empty": "No banners registered",
+
   "admin/navigation.affiliates.label": "Affiliate Management",
   "admin/navigation.commissions.label": "Commissions Management",
   "admin/navigation.dashboard.label": "Orders Management",

@@ -3,8 +3,15 @@ type Query {
     filter: BannersAffiliatesFilterInput
     sorting: BannersAffiliatesSortingInput
   ): [BannerAffiliateScroll]!
+  getBannerAffiliateBySlug(slug: String!): BannerAffiliate!
 }
 
 type Mutation {
-  addBannerAffiliate(newBannerAffiliate: NewBannerAffiliateInput!): BannerAffiliate!
+  addBannerAffiliate(
+    newBannerAffiliate: NewBannerAffiliateInput!
+  ): BannerAffiliate!
+  updateBannerAffiliate(
+    updateBannerAffiliate: UpdateBannerAffiliateInput!
+  ): BannerAffiliate!
+  deleteBannerAffiliate(id: ID!): ID!
 }

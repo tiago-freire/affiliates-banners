@@ -14,6 +14,9 @@ input NewBannerAffiliateInput {
 }
 
 input UpdateBannerAffiliateInput {
+  id: ID!
+  affiliateId: ID
+  affiliateSlug: String
   banner: String
 }
 

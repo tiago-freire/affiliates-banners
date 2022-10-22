@@ -1,4 +1,3 @@
-// import type { Affiliates, MutationAddAffiliateArgs } from 'vtex.affiliates'
 import type {
   AffiliateBanner,
   MutationAddBannerAffiliateArgs,
@@ -12,10 +11,7 @@ export const addBannerAffiliate = async (
   const mdDocument = {
     ...newBannerAffiliate,
   } as AffiliateBanner
-
-  console.log('addBannerAffiliate:\n\n\n', JSON.stringify(mdDocument, null, 2), '\n\n\n')
-
   const { DocumentId } = await affiliatesBanners.save(mdDocument)
-
-  return affiliatesBanners.get(DocumentId, ['_all'])
+  const savedDocument = await affiliatesBanners.get(DocumentId, ['_all'])
+  return savedDocument
 }

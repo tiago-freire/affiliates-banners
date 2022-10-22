@@ -1,4 +1,6 @@
+# Affiliates Banners
 
+Provide custom banners for affiliates.
 
 # Affiliates
 

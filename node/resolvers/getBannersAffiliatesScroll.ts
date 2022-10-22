@@ -1,15 +1,16 @@
-import type { QueryGetBannersAffiliatesScrollArgs } from 'ssesandbox04.affiliates-banners'
+import type {
+  AffiliateBanner, QueryGetBannersAffiliatesScrollArgs
+} from 'ssesandbox04.affiliates-banners'
 
-import { parseAffiliatesFilters } from '../utils/filters'
-import type { BannerAffiliateInput } from '../typings/bannersAffiliates'
 import { SCROLL_PAGE_SIZE } from '../utils/constants'
+import { parseAffiliatesFilters } from '../utils/filters'
 
 export const getBannersAffiliatesScroll = async (
   _: unknown,
   { filter, sorting }: QueryGetBannersAffiliatesScrollArgs,
   { clients: { affiliatesBanners } }: Context
-): Promise<BannerAffiliateInput[]> => {
-  const responseData: BannerAffiliateInput[][] = []
+): Promise<AffiliateBanner[]> => {
+  const responseData: AffiliateBanner[][] = []
   let MD_TOKEN = ''
 
   let hasMoreData = true
@@ -27,7 +28,7 @@ export const getBannersAffiliatesScroll = async (
       mdToken: MD_TOKEN !== '' ? MD_TOKEN : undefined,
     })
 
-    responseData.push(data as BannerAffiliateInput[])
+    responseData.push(data as AffiliateBanner[])
 
     MD_TOKEN = MD_TOKEN !== '' ? MD_TOKEN : mdToken
 

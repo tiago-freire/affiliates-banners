@@ -2,7 +2,7 @@
   "name": "affiliates-banners",
   "vendor": "ssesandbox04",
   "version": "0.0.0",
-  "title": "Affiliates Banners",
+  "title": "Banners Affiliates",
   "description": "Provide custom banners for vtex.affiliates",
   "mustUpdateAt": "2018-01-04",
   "categories": [],
@@ -33,6 +33,7 @@
     "react": "3.x",
     "masterdata": "1.x",
     "graphql": "1.x",
+    "store": "0.x",
     "messages": "1.x",
     "admin": "0.x"
   },
@@ -85,14 +86,5 @@
       "name": "colossus-write-logs"
     }
   ],
-  "billingOptions": {
-    "type": "free",
-    "availableCountries": [
-      "*"
-    ],
-    "support": {
-      "url": "https://support.vtex.com/hc/requests"
-    }
-  },
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }

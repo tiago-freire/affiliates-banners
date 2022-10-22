@@ -1,6 +1,14 @@
 {
   "admin/navigation.label": "Gerenciamento de Banners de Afiliados",
-  "admin/navigation.affiliates.banner": "Gerenciamento de Banners de Afiliados",
+  "admin/registration.affiliate.banner.title": "Cadastro de Banner de Afiliado",
+  "admin/update.affiliate.banner.title": "Editar Banner de Afiliado",
+  "admin/list.affiliate.banner.title": "Lista de Banners de Afiliados",
+  "admin/edit.affiliate.banner.success.message": "Banner salvo com sucesso.",
+  "admin/loading.label": "Carregando",
+  "admin/registration.affiliate.banner.errorRequired": "Afiliado e banner são obrigatórios.",
+  "admin/registration.affiliate.banner.onlyUpdate.label": "Todos os afiliados já possuem banner. Se necessário, edite um deles na lista abaixo.",
+  "admin/list.affiliate.banner.empty": "Nenhum banner cadastrado",
+
   "admin/navigation.affiliates.label": "Gerenciamento de Afiliados",
   "admin/navigation.commissions.label": "Gerenciamento de Comissões",
   "admin/navigation.dashboard.label": "Gerenciamento de Pedidos",

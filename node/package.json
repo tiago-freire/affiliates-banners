@@ -12,7 +12,7 @@
     "@vtex/api": "6.45.12",
     "@vtex/test-tools": "^3.4.1",
     "@vtex/tsconfig": "^0.5.6",
-    "ssesandbox04.affiliates-banners": "https://tiago--ssesandbox04.myvtex.com/_v/private/typings/linked/v1/ssesandbox04.affiliates-banners@0.0.0+build1666322644/public/@types/ssesandbox04.affiliates-banners",
+    "ssesandbox04.affiliates-banners": "https://tiago--bravtexfashionstore.myvtex.com/_v/private/typings/linked/v1/ssesandbox04.affiliates-banners@0.0.0+build1666458364/public/@types/ssesandbox04.affiliates-banners",
     "typescript": "3.9.7",
     "vtex.affiliates": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.affiliates@1.5.0/public/@types/vtex.affiliates",
     "vtex.affiliates-commission-service": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.affiliates-commission-service@2.2.0/public/@types/vtex.affiliates-commission-service",

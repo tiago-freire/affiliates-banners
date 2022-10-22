@@ -3,7 +3,10 @@ import { Service } from '@vtex/api'
 
 import { Clients } from './clients'
 import { addBannerAffiliate } from './resolvers/addBannerAffiliate'
+import { deleteBannerAffiliate } from './resolvers/deleteBannerAffiliate'
+import { getBannerAffiliateBySlug } from './resolvers/getBannerAffiliateBySlug'
 import { getBannersAffiliatesScroll } from './resolvers/getBannersAffiliatesScroll'
+import { updateBannerAffiliate } from './resolvers/updateBannerAffiliate'
 import type { BannerAffiliateInput } from './typings/bannersAffiliates'
 
 const TIMEOUT_MS = 1000
@@ -38,9 +41,12 @@ export default new Service({
     resolvers: {
       Query: {
         getBannersAffiliatesScroll,
+        getBannerAffiliateBySlug,
       },
       Mutation: {
         addBannerAffiliate,
+        updateBannerAffiliate,
+        deleteBannerAffiliate,
       },
     },
   },

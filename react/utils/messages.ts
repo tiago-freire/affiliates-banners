@@ -2,6 +2,30 @@ import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
   bannersPageHeaderTitle: { id: 'admin/navigation.label' },
+  editAffiliateBannerSuccessMessage: {
+    id: 'admin/edit.affiliate.banner.success.message',
+  },
+  registrationAffiliateBannerTitle: {
+    id: 'admin/registration.affiliate.banner.title',
+  },
+  updateAffiliateBannerTitle: {
+    id: 'admin/update.affiliate.banner.title',
+  },
+  listAffiliatesBannersTitle: {
+    id: 'admin/list.affiliate.banner.title',
+  },
+  loadingLabel: {
+    id: 'admin/loading.label',
+  },
+  errorRequiredBanner: {
+    id: 'admin/registration.affiliate.banner.errorRequired',
+  },
+  registrationAffiliateBannerOnlyUpdateLabel: {
+    id: "admin/registration.affiliate.banner.onlyUpdate.label",
+  },
+  listAffiliatesBannersEmpty: {
+    id: "admin/list.affiliate.banner.empty"
+  },
   paginationPreposition: { id: 'admin/table.pagination.preposition' },
   paginationSubject: { id: 'admin/table.pagination.subject' },
   paginationPrevLabel: { id: 'admin/table.pagination.prevLabel' },
