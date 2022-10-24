@@ -5679,9 +5679,9 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-"ssesandbox04.affiliates-banners@https://tiago--bravtexfashionstore.myvtex.com/_v/private/typings/linked/v1/ssesandbox04.affiliates-banners@0.0.0+build1666458364/public/@types/ssesandbox04.affiliates-banners":
+"ssesandbox04.affiliates-banners@https://tiago--ssesandbox04.myvtex.com/_v/private/typings/linked/v1/ssesandbox04.affiliates-banners@0.0.0+build1666460357/public/@types/ssesandbox04.affiliates-banners":
   version "0.0.0"
-  resolved "https://tiago--bravtexfashionstore.myvtex.com/_v/private/typings/linked/v1/ssesandbox04.affiliates-banners@0.0.0+build1666458364/public/@types/ssesandbox04.affiliates-banners#a40ca9429bff0d5ee436d7b5e36fef6784edfb02"
+  resolved "https://tiago--ssesandbox04.myvtex.com/_v/private/typings/linked/v1/ssesandbox04.affiliates-banners@0.0.0+build1666460357/public/@types/ssesandbox04.affiliates-banners#3acbea5a9531e11f75ea50fd0191ba57d653a1a2"
 
 sshpk@^1.7.0:
   version "1.17.0"

@@ -4,9 +4,10 @@ import {
   colors,
   Label,
   Select,
-  Spinner,
+  Skeleton,
   useToast,
 } from '@vtex/admin-ui'
+import type { ApolloError } from 'apollo-client'
 import React, { useEffect, useState } from 'react'
 import { useMutation, useQuery } from 'react-apollo'
 import { useIntl } from 'react-intl'
@@ -17,7 +18,9 @@ import type {
   Query as QueryBannersAffiliates,
 } from 'ssesandbox04.affiliates-banners'
 import type { Affiliate } from 'vtex.affiliates'
+import { NoSSR } from 'vtex.render-runtime'
 import { ButtonWithIcon, IconDelete, IconEdit, Table } from 'vtex.styleguide'
+
 import ADD_BANNER_AFFILIATE from '../../../graphql/addBannerAffiliate.graphql'
 import DELETE_BANNER_AFFILIATE from '../../../graphql/deleteBannerAffiliate.graphql'
 import GET_AFFILIATES from '../../../graphql/getAffiliates.graphql'
@@ -41,11 +44,11 @@ interface MutationUploadFile {
   uploadFile: { fileUrl: string }
 }
 
-const BannersManager = function () {
+const BannersManager = () => {
+  // i18n and toast hooks
   const intl = useIntl()
   const showToast = useToast()
-
-  const showError = (error: Record<string, any>) => {
+  const showError = (error: ApolloError | Record<string, string>) => {
     console.error('Banners Affiliates Error: ', JSON.stringify(error, null, 2))
     showToast({
       tone: 'critical',
@@ -54,6 +57,7 @@ const BannersManager = function () {
     })
   }
 
+  // graphql queries
   const { loading: loadingAffiliates, data: dataAffiliates } =
     useQuery<QueryAffiliates>(GET_AFFILIATES, {
       variables: {
@@ -73,13 +77,39 @@ const BannersManager = function () {
     notifyOnNetworkStatusChange: true,
   })
 
+  // graphql mutations
+  const [uploadFile, { loading: loadingUpload }] =
+    useMutation<MutationUploadFile>(UPLOAD_FILE, { onError: showError })
+
+  const [addBannerAffiliate, { loading: loadingAddBannerAffiliate }] =
+    useMutation<MutationBannerAffiliate>(ADD_BANNER_AFFILIATE, {
+      onError: showError,
+      fetchPolicy: 'no-cache',
+      notifyOnNetworkStatusChange: true,
+    })
+
+  const [updateBannerAffiliate, { loading: loadingUpdateBannerAffiliate }] =
+    useMutation<MutationBannerAffiliate>(UPDATE_BANNER_AFFILIATE, {
+      onError: showError,
+      fetchPolicy: 'no-cache',
+      notifyOnNetworkStatusChange: true,
+    })
+
+  const [deleteBannerAffiliate, { loading: loadingDeleteBannerAffiliate }] =
+    useMutation<MutationBannerAffiliate>(DELETE_BANNER_AFFILIATE, {
+      onError: showError,
+      fetchPolicy: 'no-cache',
+      notifyOnNetworkStatusChange: true,
+    })
+
+  // states
   const affiliates = dataAffiliates?.getAffiliates?.data
   const bannersAffiliates = dataBannersAffiliates?.getBannersAffiliatesScroll
+  const [availableAffiliates, setAvailableAffiliates] = useState<Affiliate[]>()
   const [selectedAffiliate, setSelectedAffiliate] = useState<Affiliate>()
   const [selectedBannerFile, setSelectedBannerFile] = useState<File>()
   const [bannerAffiliateToUpdate, setBannerAffiliateToUpdate] =
     useState<BannerAffiliate>()
-  const [availableAffiliates, setAvailableAffiliates] = useState<Affiliate[]>()
 
   useEffect(() => {
     if (bannersAffiliates?.length) {
@@ -98,35 +128,12 @@ const BannersManager = function () {
     }
   }, [affiliates, bannersAffiliates, selectedAffiliate])
 
-  const [uploadFile, { loading: loadingUpload }] =
-    useMutation<MutationUploadFile>(UPLOAD_FILE, { onError: showError })
-
-  const [addBannerAffiliate, { loading: loadingAddBannerAffiliate }] =
-    useMutation<MutationBannerAffiliate>(ADD_BANNER_AFFILIATE, {
-      onError: showError,
-      fetchPolicy: 'no-cache',
-      notifyOnNetworkStatusChange: true,
-    })
-
-  const [deleteBannerAffiliate, { loading: loadingDeleteBannerAffiliate }] =
-    useMutation<MutationBannerAffiliate>(DELETE_BANNER_AFFILIATE, {
-      onError: showError,
-      fetchPolicy: 'no-cache',
-      notifyOnNetworkStatusChange: true,
-    })
-
-  const [updateBannerAffiliate, { loading: loadingUpdateBannerAffiliate }] =
-    useMutation<MutationBannerAffiliate>(UPDATE_BANNER_AFFILIATE, {
-      onError: showError,
-      fetchPolicy: 'no-cache',
-      notifyOnNetworkStatusChange: true,
-    })
-
+  // event handlers
   const handleChangeUploadInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedBannerFile(e?.target?.files?.[0])
   }
 
-  const handleChangeAffiliates = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeAffiliate = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedAffiliate(affiliates?.find((a) => a.id === e.target.value))
   }
 
@@ -138,15 +145,16 @@ const BannersManager = function () {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const form = e.currentTarget
+
     e.preventDefault()
+
     if (selectedAffiliate && selectedBannerFile) {
       const { data: dataUploadFile, errors: errorsUpload } = await uploadFile({
         variables: { file: selectedBannerFile },
       })
 
       if (!errorsUpload?.length && dataUploadFile?.uploadFile) {
-        const fileUrl = dataUploadFile.uploadFile?.fileUrl
-
+        const { fileUrl } = dataUploadFile.uploadFile
         const { data: dataSavedBannerAffiliate, errors: errorsSave } =
           bannerAffiliateToUpdate?.id
             ? await updateBannerAffiliate({
@@ -166,7 +174,6 @@ const BannersManager = function () {
               })
 
         if (!errorsSave?.length && dataSavedBannerAffiliate) {
-          await refetchBannersAffiliates()
           showToast({
             tone: 'positive',
             dismissible: true,
@@ -174,6 +181,11 @@ const BannersManager = function () {
               messages.editAffiliateBannerSuccessMessage
             ),
           })
+          if (bannerAffiliateToUpdate?.id) {
+            await refetchBannersAffiliates()
+          } else {
+            window.parent?.location.reload()
+          }
         }
       }
 
@@ -184,19 +196,29 @@ const BannersManager = function () {
     }
   }
 
+  // table schema for <Table />
   const defaultTableSchema = {
     properties: {
       affiliateSlug: {
         title: intl.formatMessage(messages.affiliateLabel),
+        cellRenderer: ({
+          rowData: { affiliateSlug },
+        }: {
+          rowData: BannerAffiliate
+        }) => `/${affiliateSlug}`,
       },
       banner: {
         title: 'Banner',
-        cellRenderer: ({ rowData }: { rowData: BannerAffiliate }) => (
+        cellRenderer: ({
+          rowData: { banner, affiliateSlug },
+        }: {
+          rowData: BannerAffiliate
+        }) => (
           <img
             style={{ maxHeight: '80px' }}
-            src={rowData.banner!}
+            src={banner ?? undefined}
             className="mv4"
-            alt={`Banner ${rowData.affiliateSlug}`}
+            alt={`Banner ${affiliateSlug}`}
           />
         ),
       },
@@ -211,7 +233,7 @@ const BannersManager = function () {
                 onClick={() => {
                   setBannerAffiliateToUpdate(rowData)
                   setSelectedAffiliate(
-                    affiliates?.find((a) => a.id === rowData.affiliateId!)
+                    affiliates?.find((a) => a.id === rowData.affiliateId)
                   )
                 }}
                 icon={<IconEdit />}
@@ -234,96 +256,108 @@ const BannersManager = function () {
     },
   }
 
+  // loading skeleton
+  const skeleton = <Skeleton csx={{ height: 150 }} />
+
   return (
-    <Box csx={{ marginY: 16 }}>
-      {loadingAffiliates ? (
-        <Spinner />
-      ) : availableAffiliates?.length || bannerAffiliateToUpdate ? (
-        <>
-          <h2 className="c-action-primary mb4">
-            {bannerAffiliateToUpdate
-              ? intl.formatMessage(messages.updateAffiliateBannerTitle)
-              : intl.formatMessage(messages.registrationAffiliateBannerTitle)}
-          </h2>
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <Select
-              value={selectedAffiliate?.id!}
-              onChange={handleChangeAffiliates}
-              label={`${intl.formatMessage(messages.affiliateLabel)}:`}
-            >
-              {availableAffiliates?.map((a) => (
-                <option value={a.id!} key={a.id!}>
-                  /{a.slug} - {a.name} - {a.email}
-                </option>
-              ))}
-            </Select>
-            <br />
-            <Label style={{ color: colors.gray50 }} htmlFor="banner">
-              Banner:
-            </Label>
-            <br />
-
-            <input id="banner" onChange={handleChangeUploadInput} type="file" />
-            {bannerAffiliateToUpdate && (
-              <img
-                style={{ maxHeight: '80px' }}
-                className="ml4 v-mid"
-                src={bannerAffiliateToUpdate.banner!}
-                alt={`Banner ${bannerAffiliateToUpdate.affiliateSlug}`}
-              />
-            )}
-
-            <br />
-            <br />
-
-            <Button
-              loading={
-                loadingUpload ||
-                loadingAddBannerAffiliate ||
-                loadingUpdateBannerAffiliate
-              }
-              type="submit"
-            >
-              {intl.formatMessage(messages.saveLabel)}
-            </Button>
-            {bannerAffiliateToUpdate && (
-              <Button
-                className="ml4"
-                variant="criticalSecondary"
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                  e.currentTarget.form?.reset()
-                  formBannerAffiliateReset()
-                }}
+    <NoSSR>
+      <Box csx={{ marginY: 16 }}>
+        {loadingAffiliates || loadingBannersAffiliates ? (
+          skeleton
+        ) : availableAffiliates?.length || bannerAffiliateToUpdate ? (
+          <>
+            <h2 className="c-action-primary mb4">
+              {bannerAffiliateToUpdate
+                ? intl.formatMessage(messages.updateAffiliateBannerTitle)
+                : intl.formatMessage(messages.registrationAffiliateBannerTitle)}
+            </h2>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <Select
+                value={selectedAffiliate?.id ?? undefined}
+                onChange={handleChangeAffiliate}
+                label={`${intl.formatMessage(messages.affiliateLabel)}:`}
               >
-                {intl.formatMessage(messages.cancelLabel)}
+                {availableAffiliates?.map((a) => (
+                  <option value={a.id ?? undefined} key={a.id ?? undefined}>
+                    /{a.slug} - {a.name} - {a.email}
+                  </option>
+                ))}
+              </Select>
+              <br />
+              <Label style={{ color: colors.gray50 }} htmlFor="banner">
+                Banner:
+              </Label>
+              <br />
+
+              <input
+                id="banner"
+                onChange={handleChangeUploadInput}
+                type="file"
+              />
+              {bannerAffiliateToUpdate && (
+                <img
+                  style={{ maxHeight: '80px' }}
+                  className="ml4 v-mid"
+                  src={bannerAffiliateToUpdate.banner ?? undefined}
+                  alt={`Banner ${bannerAffiliateToUpdate.affiliateSlug}`}
+                />
+              )}
+
+              <br />
+              <br />
+
+              <Button
+                loading={
+                  loadingUpload ||
+                  loadingAddBannerAffiliate ||
+                  loadingUpdateBannerAffiliate
+                }
+                type="submit"
+              >
+                {intl.formatMessage(messages.saveLabel)}
               </Button>
-            )}
-          </form>
-        </>
-      ) : (
-        intl.formatMessage(messages.registrationAffiliateBannerOnlyUpdateLabel)
-      )}
-      <h2 className="c-action-primary mv6">
-        {intl.formatMessage(messages.listAffiliatesBannersTitle)}
-      </h2>
-      <div className="w-100">
-        <Table
-          fullWidth
-          dynamicRowHeight
-          density="low"
-          emptyStateLabel={intl.formatMessage(
-            messages.listAffiliatesBannersEmpty
+              {bannerAffiliateToUpdate && (
+                <Button
+                  className="ml4"
+                  variant="criticalSecondary"
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.currentTarget.form?.reset()
+                    formBannerAffiliateReset()
+                  }}
+                >
+                  {intl.formatMessage(messages.cancelLabel)}
+                </Button>
+              )}
+            </form>
+          </>
+        ) : (
+          intl.formatMessage(
+            messages.registrationAffiliateBannerOnlyUpdateLabel
+          )
+        )}
+        <h2 className="c-action-primary mv6">
+          {intl.formatMessage(messages.listAffiliatesBannersTitle)}
+        </h2>
+        <div className="w-100">
+          {loadingAffiliates ||
+          loadingBannersAffiliates ||
+          loadingDeleteBannerAffiliate ? (
+            skeleton
+          ) : (
+            <Table
+              fullWidth
+              dynamicRowHeight
+              density="low"
+              emptyStateLabel={intl.formatMessage(
+                messages.listAffiliatesBannersEmpty
+              )}
+              schema={defaultTableSchema}
+              items={bannersAffiliates}
+            />
           )}
-          loading={
-            loadingAffiliates ||
-            loadingBannersAffiliates ||
-            loadingDeleteBannerAffiliate
-          }
-          schema={defaultTableSchema}
-          items={bannersAffiliates}
-        />
-      </div>
-    </Box>
+        </div>
+      </Box>
+    </NoSSR>
   )
 }
 

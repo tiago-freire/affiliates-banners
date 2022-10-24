@@ -1,5 +1,6 @@
 import type {
-  AffiliateBanner, QueryGetBannersAffiliatesScrollArgs
+  AffiliateBanner,
+  QueryGetBannersAffiliatesScrollArgs,
 } from 'ssesandbox04.affiliates-banners'
 
 import { SCROLL_PAGE_SIZE } from '../utils/constants'
