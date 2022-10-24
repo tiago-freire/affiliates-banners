@@ -1,7 +1,7 @@
 {
   "name": "affiliates-banners",
   "vendor": "ssesandbox04",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "title": "Banners Affiliates",
   "description": "Provide custom banners for vtex.affiliates",
   "mustUpdateAt": "2018-01-04",
